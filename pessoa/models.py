@@ -8,6 +8,7 @@ class Contato (models.Model):
 
 class Pessoa (models.Model):
     nome =  models.CharField(max_length=255)
+    nome_social = models.CharField(max_lenght=255)
     data_nascimento = models.DateField()
     data_inclusao = models.DateField()
     endereco = models.ForeignKey("pessoa.Endereco", verbose_name=("Endereco"), on_delete=models.CASCADE, null=True, blank=True)
