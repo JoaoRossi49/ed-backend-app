@@ -18,7 +18,7 @@ TIPOS_DOCUMENTO_CHOICES = (
     ("CNS", "Cartão nascional de saúde")
 )
 
-RELACOES_FAMILIARES_CHOICES = (
+RELACOES_CHOICES = (
     ("PAI", "Pai"),
     ("MÃE", "Mãe"),
     ("FILHO", "Filho"),
@@ -54,26 +54,27 @@ class Contato (models.Model):
     tipo_contato = models.CharField(max_length=10, choices=TIPOS_CONTATO_CHOICES)
     descricao = models.CharField(max_length=255)
     data_inclusao = models.DateTimeField(db_default=Now())
+    data_alteracao = models.DateTimeField(null=True, blank=True)
     pass
 
 class Pessoa (models.Model):
     nome =  models.CharField(max_length=255)
-    nome_social = models.CharField(max_length=255, null=True)
+    nome_social = models.CharField(max_length=255, null=True, blank=True)
     data_nascimento = models.DateField()
     data_inclusao = models.DateTimeField(db_default=Now())
-    endereco = models.ForeignKey("pessoa.Endereco", verbose_name=("Endereco"), on_delete=models.CASCADE, null=True, blank=True)
-    contato = models.ManyToManyField("pessoa.Contato")
+    endereco = models.ForeignKey("pessoa.Endereco", verbose_name=("Endereco"), on_delete=models.CASCADE, null=True)
+    contato = models.ManyToManyField("pessoa.Contato", verbose_name=("Contato"), null=True, blank=True)
 
-class Relacao_familiar(models.Model):
+class Relacao(models.Model):
     pessoa_pai = models.ForeignKey("pessoa.pessoa", related_name='relacoes_pai', on_delete=models.CASCADE)
     pessoa_filho = models.ForeignKey("pessoa.pessoa", related_name='relacoes_filho', on_delete=models.CASCADE)
-    tipo_relacao = models.CharField(max_length=40, choices=RELACOES_FAMILIARES_CHOICES)
+    tipo_relacao = models.CharField(max_length=40, choices=RELACOES_CHOICES)
     
 class Endereco (models.Model):
     logradouro = models.CharField(max_length=255)
     numero = models.CharField(max_length=9)
     data_inclusao = models.DateTimeField(db_default=Now())
-    complemento = models.CharField(max_length=255, null=True)
+    complemento = models.CharField(max_length=255, null=True,blank=True)
     cidade= models.CharField(max_length=80, null=True)
     estado= models.CharField(max_length=50, null=True)
     pais= models.CharField(max_length=50, null=True)
