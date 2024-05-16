@@ -55,7 +55,10 @@ class Contato (models.Model):
     descricao = models.CharField(max_length=255)
     data_inclusao = models.DateTimeField(db_default=Now())
     data_alteracao = models.DateTimeField(null=True, blank=True)
-    pass
+
+    def __str__(self):
+        return self.descricao
+
 
 class Pessoa (models.Model):
     nome =  models.CharField(max_length=255)
@@ -64,7 +67,12 @@ class Pessoa (models.Model):
     data_inclusao = models.DateTimeField(db_default=Now())
     endereco = models.ForeignKey("pessoa.Endereco", verbose_name=("Endereco"), on_delete=models.CASCADE, null=True)
     contato = models.ManyToManyField("pessoa.Contato", verbose_name=("Contato"), null=True, blank=True)
-
+    def __str__(self):
+        if  self.nome_social:
+            return self.nome_social
+        else:
+            return self.nome
+    
 class Relacao(models.Model):
     pessoa_pai = models.ForeignKey("pessoa.pessoa", related_name='relacoes_pai', on_delete=models.CASCADE)
     pessoa_filho = models.ForeignKey("pessoa.pessoa", related_name='relacoes_filho', on_delete=models.CASCADE)
@@ -78,7 +86,9 @@ class Endereco (models.Model):
     cidade= models.CharField(max_length=80, null=True)
     estado= models.CharField(max_length=50, null=True)
     pais= models.CharField(max_length=50, null=True)
-
+    def __str__(self):
+        return self.logradouro + ", " + self.numero
+    
 class Documento (models.Model):
     nro_documento = models.CharField(max_length=60)
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE)
