@@ -20,10 +20,10 @@ class ContatoList(generics.ListCreateAPIView):
 
 class LoginView(APIView):
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('senha')
-        print(email, password)
-        user = authenticate(username=email, password=password)
+        username = request.data.get('username')
+        password = request.data.get('password')
+        print(username, password)
+        user = authenticate(password=password, username=username)
         
         if user is not None:
             return Response({'authenticated': True})
