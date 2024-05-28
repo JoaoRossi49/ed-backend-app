@@ -1,6 +1,6 @@
-from rest_framework import generics
-from .models import Pessoa, Endereco, Contato
-from .serializers import PessoaSerializer, EnderecoSerializer, ContatoSerializer
+from rest_framework import viewsets, generics
+from .models import Pessoa, Contato, Endereco, Documento, Relacao
+from .serializers import PessoaSerializer, ContatoSerializer, EnderecoSerializer, DocumentoSerializer, RelacaoSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -16,7 +16,15 @@ class EnderecoList(generics.ListCreateAPIView):
 
 class ContatoList(generics.ListCreateAPIView):
     queryset = Contato.objects.all()
-    serializer_class = ContatoSerializer    
+    serializer_class = ContatoSerializer   
+
+class DocumentoList(generics.ListCreateAPIView):
+    queryset = Documento.objects.all()
+    serializer_class = DocumentoSerializer
+
+class RelacaoList(generics.ListCreateAPIView):
+    queryset = Relacao.objects.all()
+    serializer_class = RelacaoSerializer
 
 class LoginView(APIView):
     def post(self, request):
