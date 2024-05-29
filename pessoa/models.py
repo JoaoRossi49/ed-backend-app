@@ -50,7 +50,7 @@ RELACOES_CHOICES = (
 class Contato(models.Model):
     tipo_contato = models.CharField(max_length=10, choices=TIPOS_CONTATO_CHOICES)
     descricao = models.CharField(max_length=255)
-    data_inclusao = models.DateTimeField(default=timezone.now())
+    data_inclusao = models.DateTimeField(default=timezone.now)
     data_alteracao = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
@@ -59,7 +59,7 @@ class Contato(models.Model):
 class Endereco(models.Model):
     logradouro = models.CharField(max_length=255)
     numero = models.CharField(max_length=9)
-    data_inclusao = models.DateTimeField(default=timezone.now())
+    data_inclusao = models.DateTimeField(default=timezone.now)
     complemento = models.CharField(max_length=255, null=True, blank=True)
     cidade = models.CharField(max_length=80, null=True)
     estado = models.CharField(max_length=50, null=True)
@@ -68,14 +68,20 @@ class Endereco(models.Model):
 
     def __str__(self):
         return f"{self.logradouro}, {self.numero}"
-
+    
+class Documento(models.Model):
+    nro_documento = models.CharField(max_length=60)
+    data_inclusao = models.DateTimeField(default=timezone.now)
+    tipo_documento = models.CharField(max_length=40, choices=TIPOS_DOCUMENTO_CHOICES)
+    
 class Pessoa(models.Model):
     nome = models.CharField(max_length=255)
     nome_social = models.CharField(max_length=255, null=True, blank=True)
     data_nascimento = models.DateField()
-    data_inclusao = models.DateTimeField(default=timezone.now())
+    data_inclusao = models.DateTimeField(default=timezone.now)
     endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True)
     contato = models.ManyToManyField(Contato, blank=True)
+    documento = models.ManyToManyField(Documento, blank=True)
 
     def __str__(self):
         return self.nome_social if self.nome_social else self.nome
@@ -84,9 +90,3 @@ class Relacao(models.Model):
     pessoa_pai = models.ForeignKey(Pessoa, related_name='relacoes_pai', on_delete=models.CASCADE)
     pessoa_filho = models.ForeignKey(Pessoa, related_name='relacoes_filho', on_delete=models.CASCADE)
     tipo_relacao = models.CharField(max_length=40, choices=RELACOES_CHOICES)
-
-class Documento(models.Model):
-    nro_documento = models.CharField(max_length=60)
-    pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE)
-    data_inclusao = models.DateTimeField(default=timezone.now())
-    tipo_documento = models.CharField(max_length=40, choices=TIPOS_DOCUMENTO_CHOICES)

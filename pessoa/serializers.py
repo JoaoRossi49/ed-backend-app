@@ -10,10 +10,23 @@ class EnderecoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Endereco
         fields = '__all__'
+        
+class DocumentoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Documento
+        fields = '__all__'
+
+class RelacaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Relacao
+        fields = '__all__'
 
 class PessoaSerializer(serializers.ModelSerializer):
     endereco = EnderecoSerializer()
     contato = ContatoSerializer(many=True)
+    documento = DocumentoSerializer(many=True)
+    
+    data_nascimento = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
 
     class Meta:
         model = Pessoa
@@ -22,6 +35,7 @@ class PessoaSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         endereco_data = validated_data.pop('endereco')
         contato_data = validated_data.pop('contato')
+        documento_data = validated_data.pop('documento')
         
         endereco = Endereco.objects.create(**endereco_data)
         
@@ -30,7 +44,11 @@ class PessoaSerializer(serializers.ModelSerializer):
         for contato in contato_data:
             contato_obj = Contato.objects.create(**contato)
             pessoa.contato.add(contato_obj)
-        
+            
+        for documento in documento_data:
+            documento_obj = Documento.objects.create(**documento)
+            documento.add(documento_obj)      
+             
         return pessoa
 
     def update(self, instance, validated_data):
@@ -53,13 +71,3 @@ class PessoaSerializer(serializers.ModelSerializer):
         instance.save()
         
         return instance
-
-class DocumentoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Documento
-        fields = '__all__'
-
-class RelacaoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Relacao
-        fields = '__all__'
