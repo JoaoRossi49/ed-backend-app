@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.functions import Now
+from django.utils import timezone
 
 # Choices
 TIPOS_CONTATO_CHOICES = (
@@ -50,7 +50,7 @@ RELACOES_CHOICES = (
 class Contato(models.Model):
     tipo_contato = models.CharField(max_length=10, choices=TIPOS_CONTATO_CHOICES)
     descricao = models.CharField(max_length=255)
-    data_inclusao = models.DateTimeField(default=Now)
+    data_inclusao = models.DateTimeField(default=timezone.now())
     data_alteracao = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
@@ -59,7 +59,7 @@ class Contato(models.Model):
 class Endereco(models.Model):
     logradouro = models.CharField(max_length=255)
     numero = models.CharField(max_length=9)
-    data_inclusao = models.DateTimeField(default=Now)
+    data_inclusao = models.DateTimeField(default=timezone.now())
     complemento = models.CharField(max_length=255, null=True, blank=True)
     cidade = models.CharField(max_length=80, null=True)
     estado = models.CharField(max_length=50, null=True)
@@ -73,7 +73,7 @@ class Pessoa(models.Model):
     nome = models.CharField(max_length=255)
     nome_social = models.CharField(max_length=255, null=True, blank=True)
     data_nascimento = models.DateField()
-    data_inclusao = models.DateTimeField(default=Now)
+    data_inclusao = models.DateTimeField(default=timezone.now())
     endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True)
     contato = models.ManyToManyField(Contato, blank=True)
 
@@ -88,5 +88,5 @@ class Relacao(models.Model):
 class Documento(models.Model):
     nro_documento = models.CharField(max_length=60)
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE)
-    data_inclusao = models.DateTimeField(default=Now)
+    data_inclusao = models.DateTimeField(default=timezone.now())
     tipo_documento = models.CharField(max_length=40, choices=TIPOS_DOCUMENTO_CHOICES)

@@ -13,7 +13,7 @@ class EnderecoSerializer(serializers.ModelSerializer):
 
 class PessoaSerializer(serializers.ModelSerializer):
     endereco = EnderecoSerializer()
-    contato = ContatoSerializer()
+    contato = ContatoSerializer(many=True)
 
     class Meta:
         model = Pessoa
@@ -24,10 +24,12 @@ class PessoaSerializer(serializers.ModelSerializer):
         contato_data = validated_data.pop('contato')
         
         endereco = Endereco.objects.create(**endereco_data)
-        contato = Contato.objects.create(**contato_data)
         
         pessoa = Pessoa.objects.create(endereco=endereco, **validated_data)
-        pessoa.contato.add(contato)
+        
+        for contato in contato_data:
+            contato_obj = Contato.objects.create(**contato)
+            pessoa.contato.add(contato_obj)
         
         return pessoa
 
@@ -42,8 +44,9 @@ class PessoaSerializer(serializers.ModelSerializer):
 
         if contato_data:
             instance.contato.clear()
-            contato_obj = Contato.objects.create(**contato_data)
-            instance.contato.add(contato_obj)
+            for contato in contato_data:
+                contato_obj = Contato.objects.create(**contato)
+                instance.contato.add(contato_obj)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
