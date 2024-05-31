@@ -47,7 +47,7 @@ class PessoaSerializer(serializers.ModelSerializer):
             
         for documento in documento_data:
             documento_obj = Documento.objects.create(**documento)
-            documento.add(documento_obj)      
+            pessoa.documento.add(documento_obj)      
              
         return pessoa
 
