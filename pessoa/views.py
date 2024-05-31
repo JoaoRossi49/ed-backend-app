@@ -37,3 +37,7 @@ class LoginView(APIView):
             return Response({'authenticated': True})
         else:
             return Response({'authenticated': False})
+
+class PessoaUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Pessoa.objects.all()
+    serializer_class = PessoaSerializer

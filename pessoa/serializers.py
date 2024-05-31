@@ -54,7 +54,8 @@ class PessoaSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         endereco_data = validated_data.pop('endereco', None)
         contato_data = validated_data.pop('contato', None)
-        
+        documento_data = validated_data.pop('documento')
+
         if endereco_data:
             for attr, value in endereco_data.items():
                 setattr(instance.endereco, attr, value)
@@ -65,6 +66,12 @@ class PessoaSerializer(serializers.ModelSerializer):
             for contato in contato_data:
                 contato_obj = Contato.objects.create(**contato)
                 instance.contato.add(contato_obj)
+
+        if documento_data:
+            instance.documento.clear()        
+            for documento in documento_data:
+                documento_obj = Documento.objects.create(**documento)
+                instance.documento.add(documento_obj)           
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
