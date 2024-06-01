@@ -53,12 +53,18 @@ class LoginView(APIView):
         if user is not None:
             user_profile.tentativas = 0
             user_profile.save()
+            log = Acesso(user = user, tipo_evento = 'S', ip= request.META.get('REMOTE_ADDR'))
+            log.save()
             return Response(status=status.HTTP_200_OK)
         else:
             user_profile.tentativas += 1
             user_profile.save()
+            log = Acesso(user = user_profile, tipo_evento = 'F', ip= request.META.get('REMOTE_ADDR'))
+            log.save()
             if user_profile.tentativas >= 3:
                 user_profile.bloqueado = True
                 user_profile.save()
+                log = Acesso(user = user_profile, tipo_evento = 'F', ip= request.META.get('REMOTE_ADDR'))
+                log.save()
                 return Response({'error': 'Usuário bloqueado devido a várias tentativas de login'}, status=status.HTTP_401_UNAUTHORIZED)
             return Response({'error': 'Credenciais inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
