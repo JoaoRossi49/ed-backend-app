@@ -13,7 +13,7 @@ class PessoaList(generics.ListCreateAPIView):
     queryset = Pessoa.objects.all()
     serializer_class = PessoaSerializer
 
-class PessoaUpdate(generics.RetrieveUpdateAPIView):
+class PessoaUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Pessoa.objects.all()
     serializer_class = PessoaSerializer
     
