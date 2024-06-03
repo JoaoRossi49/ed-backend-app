@@ -12,10 +12,10 @@ from log.models import Acesso, UserProfile
 class PessoaList(generics.ListCreateAPIView):
     queryset = Pessoa.objects.all()
     serializer_class = PessoaSerializer
-
+    
 class PessoaUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Pessoa.objects.all()
-    serializer_class = PessoaSerializer
+    serializer_class = PessoaSerializer 
     
 class EnderecoList(generics.ListCreateAPIView):
     queryset = Endereco.objects.all()

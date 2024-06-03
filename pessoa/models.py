@@ -79,9 +79,9 @@ class Pessoa(models.Model):
     nome_social = models.CharField(max_length=255, null=True, blank=True)
     data_nascimento = models.DateField()
     data_inclusao = models.DateTimeField(default=timezone.now)
-    endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True)
-    contato = models.ManyToManyField(Contato, blank=True)
-    documento = models.ManyToManyField(Documento, blank=True)
+    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True)
+    contato = models.ManyToManyField(Contato, related_name='pessoas', blank=True)
+    documento = models.ManyToManyField(Documento,  related_name='pessoas', blank=True)
 
     def __str__(self):
         return self.nome_social if self.nome_social else self.nome

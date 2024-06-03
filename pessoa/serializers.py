@@ -78,6 +78,3 @@ class PessoaSerializer(serializers.ModelSerializer):
         instance.save()
         
         return instance
-    
-    def delete(self, instance, validated_data):
-        instance.delete()
