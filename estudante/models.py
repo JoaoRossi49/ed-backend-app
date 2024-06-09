@@ -12,6 +12,12 @@ def generar_matricula():
         matricula = ''.join([str(random.randint(0, 9)) for _ in range(6)])
     return matricula
 
+class Turma (models.Model):
+    nome = models.CharField(max_length=255)
+    descricao = models.TextField(blank=True, null=True)
+    data_inclusao = models.DateTimeField(default=timezone.now)
+    data_inicio = models.DateTimeField(blank=True, null= True)
+    data_fim = models.DateField(blank=True, null=True)
 
 class Matricula (models.Model):
     numero_matricula = models.CharField(max_length=6, unique=True, default=generar_matricula)
@@ -25,7 +31,9 @@ class Matricula (models.Model):
 class Aula (models.Model):
     tema = models.CharField(max_length=250)
     descricao = models.CharField()
-    #anexos = models.B
+    #anexos = 
+    data_aula = models.DateField(null=True, blank=True)
+    turma = models.ForeignKey(Turma, on_delete= models.CASCADE, null=True)
     
 class Presenca (models.Model):
     estudante_id = models.ForeignKey(Matricula, on_delete=models.CASCADE, null=True)
