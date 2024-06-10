@@ -25,6 +25,7 @@ class Matricula (models.Model):
     ativo = models.BooleanField(default=True)
     data_inativacao = models.DateTimeField(null=True, blank=True)
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE, null=True)
+    turma = models.ForeignKey(Turma, on_delete= models.CASCADE, null=True)
     def __str__(self):
         return self.numero_matricula
 
