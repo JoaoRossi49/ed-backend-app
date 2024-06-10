@@ -16,7 +16,7 @@ class Turma (models.Model):
     nome = models.CharField(max_length=255)
     descricao = models.TextField(blank=True, null=True)
     data_inclusao = models.DateTimeField(default=timezone.now)
-    data_inicio = models.DateTimeField(blank=True, null= True)
+    data_inicio = models.DateField(blank=True, null= True)
     data_fim = models.DateField(blank=True, null=True)
 
 class Matricula (models.Model):
