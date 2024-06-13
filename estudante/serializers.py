@@ -11,3 +11,8 @@ class TurmaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Turma
         fields = '__all__'
+
+class TurmaCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Turma
+        fields = ('id',)

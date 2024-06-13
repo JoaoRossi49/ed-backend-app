@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Pessoa, Contato, Endereco, Documento, Relacao
 from estudante.models import Matricula, Turma
+from estudante.serializers import TurmaCreateSerializer, MatriculaSerializer
 
 class ContatoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,7 +27,6 @@ class PessoaSerializer(serializers.ModelSerializer):
     endereco = EnderecoSerializer()
     contato = ContatoSerializer(many=True)
     documento = DocumentoSerializer(many=True)
-    turma_id = serializers.IntegerField(write_only=True, required=False)
     
     data_nascimento = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
 
@@ -38,7 +38,7 @@ class PessoaSerializer(serializers.ModelSerializer):
         endereco_data = validated_data.pop('endereco')
         contato_data = validated_data.pop('contato')
         documento_data = validated_data.pop('documento')
-        turma_id = validated_data.pop('turma_id', None)
+        turma_data = validated_data.pop('turma', None)
         
         endereco = Endereco.objects.create(**endereco_data)
         
@@ -52,15 +52,14 @@ class PessoaSerializer(serializers.ModelSerializer):
             documento_obj = Documento.objects.create(**documento)
             pessoa.documento.add(documento_obj)  
 
-        turma = None
-        if turma_id:
+        if turma_data:
             try:
-                turma = Turma.objects.get(id=turma_id)
+                turma = Turma.objects.get(id=turma_data.get('id'))
             except Turma.DoesNotExist:
                 raise serializers.ValidationError({"turma": "Turma não encontrada."})
             
-        #Cria-se uma nova matrícula    
-        Matricula.objects.create(pessoa=pessoa, turma=turma) 
+            # Cria uma nova matrícula associada à pessoa e à turma
+            Matricula.objects.create(pessoa=pessoa, turma=turma)
 
         return pessoa
 
@@ -68,7 +67,6 @@ class PessoaSerializer(serializers.ModelSerializer):
         endereco_data = validated_data.pop('endereco', None)
         contato_data = validated_data.pop('contato', None)
         documento_data = validated_data.pop('documento')
-        turma_id = validated_data.pop('turma_id', None)
 
         if endereco_data:
             for attr, value in endereco_data.items():
@@ -87,19 +85,12 @@ class PessoaSerializer(serializers.ModelSerializer):
                 documento_obj = Documento.objects.create(**documento)
                 instance.documento.add(documento_obj)  
 
-        if turma_id:
-            try:
-                turma = Turma.objects.get(id=turma_id)
-            except Turma.DoesNotExist:
-                raise serializers.ValidationError({"turma": "Turma não encontrada."})
-
-            # Atualiza ou cria uma matrícula associada à pessoa e à turma
-            matricula, created = Matricula.objects.update_or_create(
-                pessoa=instance, 
-                defaults={'turma': turma}
-            )
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-        
         return instance
+
+    def get_turma(self, obj):
+        # Busca a matrícula associada à pessoa e retorna os detalhes da turma
+        try:
+            matricula = Matricula.objects.get(pessoa=obj)
+            return TurmaCreateSerializer(matricula.turma).data
+        except Matricula.DoesNotExist:
+            return None
