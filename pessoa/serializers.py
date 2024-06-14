@@ -38,7 +38,6 @@ class PessoaSerializer(serializers.ModelSerializer):
         endereco_data = validated_data.pop('endereco')
         contato_data = validated_data.pop('contato')
         documento_data = validated_data.pop('documento')
-        turma_data = validated_data.pop('turma', None)
         
         endereco = Endereco.objects.create(**endereco_data)
         
@@ -50,17 +49,8 @@ class PessoaSerializer(serializers.ModelSerializer):
             
         for documento in documento_data:
             documento_obj = Documento.objects.create(**documento)
-            pessoa.documento.add(documento_obj)  
-
-        if turma_data:
-            try:
-                turma = Turma.objects.get(id=turma_data.get('id'))
-            except Turma.DoesNotExist:
-                raise serializers.ValidationError({"turma": "Turma não encontrada."})
-            
-            # Cria uma nova matrícula associada à pessoa e à turma
-            Matricula.objects.create(pessoa=pessoa, turma=turma)
-
+            pessoa.documento.add(documento_obj)      
+             
         return pessoa
 
     def update(self, instance, validated_data):
@@ -83,14 +73,10 @@ class PessoaSerializer(serializers.ModelSerializer):
             instance.documento.clear()        
             for documento in documento_data:
                 documento_obj = Documento.objects.create(**documento)
-                instance.documento.add(documento_obj)  
+                instance.documento.add(documento_obj)           
 
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        
         return instance
-
-    def get_turma(self, obj):
-        # Busca a matrícula associada à pessoa e retorna os detalhes da turma
-        try:
-            matricula = Matricula.objects.get(pessoa=obj)
-            return TurmaCreateSerializer(matricula.turma).data
-        except Matricula.DoesNotExist:
-            return None

@@ -18,10 +18,12 @@ class Turma (models.Model):
     data_inclusao = models.DateTimeField(default=timezone.now)
     data_inicio = models.DateField(blank=True, null= True)
     data_fim = models.DateField(blank=True, null=True)
+    def __str__(self):
+        return self.nome
 
 class Matricula (models.Model):
     numero_matricula = models.CharField(max_length=6, unique=True, default=generar_matricula)
-    data_inclusao = models.DateTimeField(db_default=Now())
+    data_inclusao = models.DateTimeField(default=timezone.now)
     ativo = models.BooleanField(default=True)
     data_inativacao = models.DateTimeField(null=True, blank=True)
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE, null=True)
@@ -38,7 +40,7 @@ class Aula (models.Model):
     
 class Presenca (models.Model):
     estudante_id = models.ForeignKey(Matricula, on_delete=models.CASCADE, null=True)
-    data_hora_chegada = models.DateTimeField(db_default=Now())
+    data_hora_chegada = models.DateTimeField(default=timezone.now)
     aula_id = models.ForeignKey(Aula, on_delete = models.CASCADE)
     
 @receiver(pre_save, sender=Matricula)
