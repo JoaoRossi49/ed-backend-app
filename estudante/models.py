@@ -15,7 +15,7 @@ def generar_matricula():
 class Turma (models.Model):
     nome = models.CharField(max_length=255)
     descricao = models.TextField(blank=True, null=True)
-    data_inclusao = models.DateTimeField(default=timezone.now)
+    data_inclusao = models.DateTimeField(default=timezone.now, null=True, blank=True)
     data_inicio = models.DateField(blank=True, null= True)
     data_fim = models.DateField(blank=True, null=True)
     def __str__(self):
