@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Pessoa, Contato, Endereco, Documento, Relacao
+from estudante.models import Matricula, Turma
+from estudante.serializers import TurmaCreateSerializer, MatriculaSerializer
 
 class ContatoSerializer(serializers.ModelSerializer):
     class Meta:
