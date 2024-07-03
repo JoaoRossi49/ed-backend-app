@@ -4,6 +4,7 @@ from .serializers import MatriculaSerializer, TurmaSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class MatriculaList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Matricula.objects.all()
     serializer_class = MatriculaSerializer
     
