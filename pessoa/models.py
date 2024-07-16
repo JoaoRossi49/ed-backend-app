@@ -15,36 +15,8 @@ TIPOS_DOCUMENTO_CHOICES = (
     ("PASS", "Passaporte"),
     ("CNH", "Carteira de motorista"),
     ("EL", "Título de eleitor"),
-    ("CNS", "Cartão nacional de saúde")
-)
-
-RELACOES_CHOICES = (
-    ("PAI", "Pai"),
-    ("MÃE", "Mãe"),
-    ("FILHO", "Filho"),
-    ("FILHA", "Filha"),
-    ("IRMÃO", "Irmão"),
-    ("IRMÃ", "Irmã"),
-    ("AVÔ", "Avô"),
-    ("AVÓ", "Avó"),
-    ("TIO", "Tio"),
-    ("TIA", "Tia"),
-    ("PRIMO", "Primo"),
-    ("PRIMA", "Prima"),
-    ("SOGRO", "Sogro"),
-    ("SOGRA", "Sogra"),
-    ("GENRO", "Genro"),
-    ("NORA", "Nora"),
-    ("MARIDO", "Marido"),
-    ("ESPOSA", "Esposa"),
-    ("SOBRINHO", "Sobrinho"),
-    ("SOBRINHA", "Sobrinha"),
-    ("NETO", "Neto"),
-    ("NETA", "Neta"),
-    ("PAI_ADOTIVO", "Pai Adotivo"),
-    ("MÃE_ADOTIVA", "Mãe Adotiva"),
-    ("FILHO_ADOTIVO", "Filho Adotivo"),
-    ("FILHA_ADOTIVA", "Filha Adotiva")
+    ("CNS", "Cartão nacional de saúde"),
+    ("CNPJ", "Cadastro Nacional da Pessoa Jurídica")
 )
 
 class Contato(models.Model):
@@ -73,6 +45,11 @@ class Documento(models.Model):
     nro_documento = models.CharField(max_length=60)
     data_inclusao = models.DateTimeField(default=timezone.now)
     tipo_documento = models.CharField(max_length=40, choices=TIPOS_DOCUMENTO_CHOICES)
+
+class Tipo_pessoa(models.Model):
+    descricao = models.CharField(max_length=40)
+    def __str__(self):
+        return self.descricao
     
 class Pessoa(models.Model):
     nome = models.CharField(max_length=255)
@@ -86,7 +63,3 @@ class Pessoa(models.Model):
     def __str__(self):
         return self.nome_social if self.nome_social else self.nome
 
-class Relacao(models.Model):
-    pessoa_pai = models.ForeignKey(Pessoa, related_name='relacoes_pai', on_delete=models.CASCADE)
-    pessoa_filho = models.ForeignKey(Pessoa, related_name='relacoes_filho', on_delete=models.CASCADE)
-    tipo_relacao = models.CharField(max_length=40, choices=RELACOES_CHOICES)

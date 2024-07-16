@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pessoa, Contato, Endereco, Documento, Relacao
+from .models import Pessoa, Contato, Endereco, Documento
 from estudante.models import Matricula, Turma
 from estudante.serializers import TurmaCreateSerializer, MatriculaSerializer
 
@@ -16,11 +16,6 @@ class EnderecoSerializer(serializers.ModelSerializer):
 class DocumentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Documento
-        fields = '__all__'
-
-class RelacaoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Relacao
         fields = '__all__'
 
 class PessoaSerializer(serializers.ModelSerializer):
