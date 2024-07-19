@@ -73,11 +73,16 @@ class Aula(models.Model):
     educador = models.ForeignKey(Pessoa, on_delete= models.DO_NOTHING, null=True, blank=True)
     modulo = models.ForeignKey(Modulo, on_delete= models.DO_NOTHING, null=True, blank=True)
     def __str__(self):
-        return self.tema
+        return self.tema + ' | ' + self.turma.nome
 
 class Tipo_presenca(models.Model):
     codigo = models.CharField(null=True, blank=True)
     descricao = models.CharField(max_length=255, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'Profissional interno'
+        verbose_name_plural = 'Tipos de profissionais internos'
+        
     def __str__(self):
         return self.descricao
     
@@ -86,6 +91,11 @@ class Presenca(models.Model):
     tipo_presenca = models.ForeignKey(Tipo_presenca, on_delete= models.DO_NOTHING, null=True, blank=True)
     aula_id = models.ForeignKey(Aula, on_delete= models.DO_NOTHING)
     data_presenca = models.DateField(null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'Registro de presença'
+        verbose_name_plural = 'Presenças'
+        
     def __str__(self):
         return self.matricula.pessoa.nome + ' | ' + self.tipo_presenca.codigo
     

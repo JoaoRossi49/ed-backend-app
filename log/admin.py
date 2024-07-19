@@ -14,8 +14,15 @@ class AcessoAdmin(admin.ModelAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'bloqueado')
+    list_display = ('nome', 'bloqueado')
     search_fields = ('user__username',)
+    
+    def nome(self, obj):
+        return obj.user
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(bloqueado=True)
 
 @admin.register(Cadastro)
 class CadastroAdmin(admin.ModelAdmin):

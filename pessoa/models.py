@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import date
 
 # Choices
 TIPOS_CONTATO_CHOICES = (
@@ -59,7 +60,21 @@ class Pessoa(models.Model):
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True)
     contato = models.ManyToManyField(Contato, related_name='pessoas', blank=True)
     documento = models.ManyToManyField(Documento,  related_name='pessoas', blank=True)
-
+    
     def __str__(self):
-        return self.nome_social if self.nome_social else self.nome
+        if self.nome:
+            return self.nome
+        else:
+            return self.nome_social
 
+
+    def calcular_idade(self):
+        hoje = date.today()
+        anos = hoje.year - self.data_nascimento.year
+        meses = hoje.month - self.data_nascimento.month
+        
+        if meses < 0:
+            anos -= 1
+            meses += 12
+
+        return f"{anos} anos e {meses} meses"
