@@ -55,6 +55,7 @@ class Tipo_pessoa(models.Model):
 class Pessoa(models.Model):
     nome = models.CharField(max_length=255)
     nome_social = models.CharField(max_length=255, null=True, blank=True)
+    sexo = models.CharField(max_length=1, null=True, blank=True)
     data_nascimento = models.DateField()
     data_inclusao = models.DateTimeField(default=timezone.now)
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True)

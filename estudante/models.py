@@ -43,12 +43,18 @@ class Cbo(models.Model):
     def __str__(self):
         return self.descricao
 
+class Escolaridade(models.Model):
+    descricao = models.CharField(max_length=255)
+    def __str__(self):
+        return self.descricao
+
 class Matricula(models.Model):
     numero_matricula = models.CharField(max_length=6, unique=True, default=generar_matricula)
     data_inclusao = models.DateTimeField(default=timezone.now)
     ativo = models.BooleanField(default=True)
     data_inativacao = models.DateTimeField(null=True, blank=True)
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE, null=True)
+    escolaridade = models.ForeignKey(Escolaridade, on_delete=models.DO_NOTHING, null=True, blank=True)
     turma = models.ForeignKey(Turma, on_delete= models.DO_NOTHING, null=True)
     curso = models.ForeignKey(Curso, on_delete= models.DO_NOTHING, null=True)
     empresa = models.ForeignKey(Empresa, on_delete= models.DO_NOTHING, null=True)

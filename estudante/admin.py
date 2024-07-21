@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
-from .models import Matricula, Turma, Aula, Presenca, Curso, Empresa, Cbo, Modulo, Tipo_presenca
+from .models import Matricula, Turma, Aula, Presenca, Curso, Empresa, Cbo, Modulo, Tipo_presenca, Escolaridade
 from pessoa.models import Pessoa
 
 
@@ -32,3 +32,4 @@ admin.site.register(Turma, TurmaAdmin)
 admin.site.register(Aula)
 admin.site.register(Presenca, PresencaAdmin)
 admin.site.register(Tipo_presenca)
+admin.site.register(Escolaridade)

@@ -1,5 +1,25 @@
 from rest_framework import serializers
-from .models import Matricula, Turma
+from .models import Matricula, Turma, Cbo, Curso, Empresa, Escolaridade
+
+class CboSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cbo
+        fields = '__all__'
+
+class CursoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Curso
+        fields = '__all__'
+
+class EmpresaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Empresa
+        fields = '__all__'
+
+class EscolaridadeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Escolaridade
+        fields = '__all__'
 
 class TurmaSerializer(serializers.ModelSerializer):
     data_inicio = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
