@@ -51,7 +51,7 @@ class PessoaSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         endereco_data = validated_data.pop('endereco', None)
         contato_data = validated_data.pop('contato', None)
-        documento_data = validated_data.pop('documento')
+        documento_data = validated_data.pop('documento', None)
 
         if endereco_data:
             for attr, value in endereco_data.items():

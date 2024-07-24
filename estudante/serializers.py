@@ -28,12 +28,16 @@ class TurmaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class MatriculaSerializer(serializers.ModelSerializer):
+    escolaridade_nome = serializers.CharField(source='escolaridade.descricao', read_only=True)
     turma_nome = serializers.CharField(source='turma.nome', read_only=True)
+    curso_nome = serializers.CharField(source='curso.nome', read_only=True)
+    empresa_nome = serializers.CharField(source='empresa.nome_fantasia', read_only=True)
+    cbo_nome = serializers.CharField(source='cbo.descricao', read_only=True)
 
     class Meta:
         model = Matricula
         fields = '__all__'
-        extra_fields = ['turma_nome']
+        extra_fields = ['escolaridade_nome', 'turma_nome', 'curso_nome', 'empresa_nome', 'cbo_nome']
 
     def get_field_names(self, declared_fields, info):
         expanded_fields = super(MatriculaSerializer, self).get_field_names(declared_fields, info)
