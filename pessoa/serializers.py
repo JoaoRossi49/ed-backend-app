@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pessoa, Contato, Endereco, Documento
+from .models import Pessoa, Contato, Endereco, Documento, Perfil
 from estudante.models import Matricula, Turma
 from estudante.serializers import TurmaCreateSerializer, MatriculaSerializer
 
@@ -75,3 +75,8 @@ class PessoaSerializer(serializers.ModelSerializer):
         instance.save()
         
         return instance
+
+class PerfilSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Perfil
+        fields = '__all__'

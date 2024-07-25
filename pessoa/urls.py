@@ -7,5 +7,6 @@ urlpatterns = [
     path('endereco/',EnderecoList.as_view()),
     path('contato/', ContatoList.as_view()),
     path('login/', LoginView.as_view()),
+    path('perfil/', PerfilList.as_view()),
 ]
 

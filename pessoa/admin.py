@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Pessoa, Endereco, Contato, Documento, Tipo_pessoa
+from .models import Pessoa, Endereco, Contato, Documento, Tipo_pessoa, Perfil
 
 
 class PessoaAdmin(admin.ModelAdmin):
@@ -20,9 +20,9 @@ class ContatoAdmin(admin.ModelAdmin):
         return ", ".join([pessoa.nome for pessoa in obj.pessoas.all()])
     pessoas_display.short_description = 'Pessoas Associadas'
 
-
 admin.site.register(Pessoa, PessoaAdmin)
 admin.site.register(Endereco)
 admin.site.register(Contato, ContatoAdmin)
+admin.site.register(Perfil)
 admin.site.register(Documento)
 admin.site.register(Tipo_pessoa)
