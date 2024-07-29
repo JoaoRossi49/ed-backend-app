@@ -9,6 +9,8 @@ urlpatterns = [
     path('cbos/', CboList.as_view()),
     path('cursos/', CursoList.as_view()),
     path('empresas/', EmpresaList.as_view()),
-    path('escolaridades/', EscolaridadeList.as_view())
+    path('escolaridades/', EscolaridadeList.as_view()),
+    path('contrato/<int:matricula>', download_docx),
+    path('contrato-pdf/<int:pk>/', view_docx_as_pdf)
 ]
 
