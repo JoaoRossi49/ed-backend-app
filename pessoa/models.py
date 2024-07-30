@@ -3,25 +3,12 @@ from django.utils import timezone
 from datetime import date
 from django.contrib.auth.models import User
 
-# Choices
-TIPOS_CONTATO_CHOICES = (
+class Contato(models.Model):
+    TIPOS_CONTATO_CHOICES = (
     ("CELULAR", "Celular"),
     ("TELEFONE", "Telefone"),
     ("EMAIL", "E-mail")
-)
-
-TIPOS_DOCUMENTO_CHOICES = (
-    ("RG", "Documento de identidade"),
-    ("CPF", "Cadastro de pessoa física"),
-    ("CTPS", "Carteira nacional de trabalho"),
-    ("PASS", "Passaporte"),
-    ("CNH", "Carteira de motorista"),
-    ("EL", "Título de eleitor"),
-    ("CNS", "Cartão nacional de saúde"),
-    ("CNPJ", "Cadastro Nacional da Pessoa Jurídica")
-)
-
-class Contato(models.Model):
+    )
     tipo_contato = models.CharField(max_length=10, choices=TIPOS_CONTATO_CHOICES)
     descricao = models.CharField(max_length=255)
     data_inclusao = models.DateTimeField(default=timezone.now)
@@ -44,9 +31,22 @@ class Endereco(models.Model):
         return f"{self.logradouro}, {self.numero}"
     
 class Documento(models.Model):
+    TIPOS_DOCUMENTO_CHOICES = (
+    ("RG", "Documento de identidade"),
+    ("CPF", "Cadastro de pessoa física"),
+    ("CTPS", "Carteira nacional de trabalho"),
+    ("PASS", "Passaporte"),
+    ("CNH", "Carteira de motorista"),
+    ("EL", "Título de eleitor"),
+    ("CNS", "Cartão nacional de saúde"),
+    ("CNPJ", "Cadastro Nacional da Pessoa Jurídica")
+    )
     nro_documento = models.CharField(max_length=60)
     data_inclusao = models.DateTimeField(default=timezone.now)
     tipo_documento = models.CharField(max_length=40, choices=TIPOS_DOCUMENTO_CHOICES)
+
+    def __str__(self):
+        return f'{self.nro_documento}, {self.tipo_documento}'
 
 class Tipo_pessoa(models.Model):
     descricao = models.CharField(max_length=40)
