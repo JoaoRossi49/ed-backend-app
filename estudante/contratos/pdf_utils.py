@@ -7,12 +7,12 @@ from django.db import connection
 def consulta_matricula(matricula):
     with connection.cursor() as cursor:
         query = """
-                select
+                                select
                         ee.nome_fantasia as "[NOME_EMPRESA]",
-                        '--' as "[CNPJ_EMPRESA]",
-                        '--' as "[ENDERECO_EMPRESA]",
+                        pde.nro_documento as "[CNPJ_EMPRESA]",
+                        pee.logradouro || ' nº ' || pee.numero || ' na cidade de ' || pee.cidade || '/' || pee.estado as "[ENDERECO_EMPRESA]",
                         pp.nome as "[NOME_APRENDIZ]",
-                        pe.logradouro || ' nº ' || pe.numero as "[ENDERECO_APRENDIZ]",
+                        pe.logradouro || ' nº ' || pe.numero || ' na cidade de ' || pe.cidade || '/' || pe.estado as "[ENDERECO_APRENDIZ]",
                         pd.nro_documento as "[CPF_APRENDIZ]",
                         ec.descricao as "[OCUPACAO_APRENDIZ]",
                         ec.codigo as "[NRO_CBO]",
@@ -86,8 +86,11 @@ def consulta_matricula(matricula):
                         estudante_matricula em,
                         pessoa_pessoa pp,
                         pessoa_endereco pe,
+                        pessoa_endereco pee,
                         pessoa_pessoa_documento ppd,
+                        estudante_empresa_documento eed,
                         pessoa_documento pd,
+                        pessoa_documento pde,
                         estudante_turma et,
                         estudante_cbo ec,
                         estudante_curso ec2,
@@ -96,9 +99,13 @@ def consulta_matricula(matricula):
                     where
                         em.pessoa_id = pp.id
                         and pp.endereco_id = pe.id
+                        and ee.endereco_id = pee.id
                         and pp.id = ppd.pessoa_id
                         and ppd.documento_id = pd.id
                         and pd.tipo_documento = 'CPF'
+                        and ee.id = eed.empresa_id
+                        and eed.documento_id = pde.id
+                        and pde.tipo_documento = 'CNPJ'
                         and em.turma_id = et.id
                         and em.cbo_id = ec.id
                         and em.curso_id = ec2.id
