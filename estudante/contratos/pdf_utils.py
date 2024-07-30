@@ -67,10 +67,12 @@ def consulta_matricula(matricula):
                 and em.cbo_id = ec.id
                 and em.curso_id = ec2.id
                 and em.empresa_id = ee.id
-                and em.numero_matricula = '%s';
+                and em.numero_matricula = %s;
         """
         cursor.execute(query, [matricula])
+        print('Pesquisa da matricula: ', matricula)
         resultados = cursor.fetchall()
+        print('Resultado da query: ', resultados)
         colunas = [desc[0] for desc in cursor.description]
     
     dados = [dict(zip(colunas, resultado)) for resultado in resultados]
@@ -82,6 +84,7 @@ def modify_docx(doc_path, matricula):
     doc = Document(doc_path)
     
     for dado in dados:
+        print('Resultado da pesquisa: ', dado)
         for search_text in FIELDS:
             print(f'Procurando: {search_text} para substituir por {dado[search_text]}')
             
