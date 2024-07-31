@@ -93,7 +93,7 @@ class Matricula(models.Model):
     data_inativacao = models.DateTimeField(null=True, blank=True)
     pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE, null=True)
     escolaridade = models.ForeignKey(Escolaridade, on_delete=models.DO_NOTHING, null=True, blank=True)
-    salario = models.FloatField(null=True, blank=True)
+    salario = models.CharField(null=True, blank=True)
     data_inicio_contrato = models.DateField(null=True, blank=True)
     data_terminio_contrato = models.DateField(null=True, blank=True)
     data_inicio_empresa = models.DateField(null=True, blank=True)
