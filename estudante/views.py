@@ -51,10 +51,10 @@ class MatriculaList(generics.ListCreateAPIView):
         
         return queryset
 
-    def post(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+#    def post(self, request, *args, **kwargs):
+#        queryset = self.get_queryset()
+#        serializer = self.get_serializer(queryset, many=True)
+#        return Response(serializer.data)
 
 
 class MatriculaUpdate(generics.RetrieveUpdateDestroyAPIView):
