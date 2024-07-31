@@ -33,6 +33,10 @@ class MatriculaSerializer(serializers.ModelSerializer):
     curso_nome = serializers.CharField(source='curso.nome', read_only=True)
     empresa_nome = serializers.CharField(source='empresa.nome_fantasia', read_only=True)
     cbo_nome = serializers.CharField(source='cbo.descricao', read_only=True)
+    data_inicio_contrato = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
+    data_terminio_contrato = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
+    data_inicio_empresa = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
+    data_terminio_empresa = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
 
     class Meta:
         model = Matricula
