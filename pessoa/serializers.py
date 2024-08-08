@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pessoa, Contato, Endereco, Documento, Relacao
+from .models import Pessoa, Contato, Endereco, Documento, Perfil
 from estudante.models import Matricula, Turma
 from estudante.serializers import TurmaCreateSerializer, MatriculaSerializer
 
@@ -16,11 +16,6 @@ class EnderecoSerializer(serializers.ModelSerializer):
 class DocumentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Documento
-        fields = '__all__'
-
-class RelacaoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Relacao
         fields = '__all__'
 
 class PessoaSerializer(serializers.ModelSerializer):
@@ -56,7 +51,7 @@ class PessoaSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         endereco_data = validated_data.pop('endereco', None)
         contato_data = validated_data.pop('contato', None)
-        documento_data = validated_data.pop('documento')
+        documento_data = validated_data.pop('documento', None)
 
         if endereco_data:
             for attr, value in endereco_data.items():
@@ -80,3 +75,8 @@ class PessoaSerializer(serializers.ModelSerializer):
         instance.save()
         
         return instance
+
+class PerfilSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Perfil
+        fields = '__all__'

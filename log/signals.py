@@ -5,10 +5,14 @@ from .models import UserProfile, Cadastro
 import json
 from pessoa.models import Pessoa, Contato, Endereco, Documento
 from datetime import date, datetime
+from django.db.models.fields.files import ImageFieldFile
 
 def custom_serializer(obj):
     if isinstance(obj, (datetime, date)):
         return obj.isoformat()
+    elif isinstance(obj, ImageFieldFile):
+        # Ignore o campo de imagem ou trate como necessário
+        return None
     raise TypeError(f"Type {type(obj)} not serializable")
 
 @receiver(post_save, sender=User)

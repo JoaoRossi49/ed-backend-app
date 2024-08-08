@@ -18,11 +18,23 @@ class Acesso(models.Model):
     tipo_evento = models.CharField(max_length=10, choices=TIPOS_EVENTO_ACESSO_CHOICES)
     user = models.CharField()
     ip = models.CharField(max_length=15)
+    
+    class Meta:
+        verbose_name = 'Acesso ao sistema'
+        verbose_name_plural = 'Acessos ao sistema'
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tentativas = models.IntegerField(default=0)
     bloqueado = models.BooleanField(default=False)
+  
+    class Meta:
+        verbose_name = 'um Usuário Bloqueado'
+        verbose_name_plural = 'Usuários bloqueados'
+        
+    def __str__(self):
+        return self.user.username
+
 
 class Cadastro(models.Model):
     data_inclusao = models.DateTimeField(auto_now_add=True)

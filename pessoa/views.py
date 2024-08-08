@@ -1,6 +1,6 @@
 from rest_framework import viewsets, generics
-from .models import Pessoa, Contato, Endereco, Documento, Relacao
-from .serializers import PessoaSerializer, ContatoSerializer, EnderecoSerializer, DocumentoSerializer, RelacaoSerializer
+from .models import Pessoa, Contato, Endereco, Documento, Perfil
+from .serializers import PessoaSerializer, ContatoSerializer, EnderecoSerializer, DocumentoSerializer, PerfilSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -37,10 +37,13 @@ class DocumentoList(generics.ListCreateAPIView):
     queryset = Documento.objects.all()
     serializer_class = DocumentoSerializer
 
-class RelacaoList(generics.ListCreateAPIView):
+class PerfilList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = Relacao.objects.all()
-    serializer_class = RelacaoSerializer
+    serializer_class = PerfilSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Perfil.objects.filter(user=user)
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
