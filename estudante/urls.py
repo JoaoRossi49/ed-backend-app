@@ -11,6 +11,10 @@ urlpatterns = [
     path('empresas/', EmpresaList.as_view()),
     path('escolaridades/', EscolaridadeList.as_view()),
     path('contrato/<str:matricula>', download_docx),
-    path('contrato-pdf/<int:pk>/', view_docx_as_pdf)
+    path('contrato-pdf/<int:pk>/', view_docx_as_pdf),
+    path('aulas/', AulaList.as_view()),
+    path('aulas/<int:pk>/', AulaUpdate.as_view()),
+    path('modulos/', ModuloList.as_view()),
+    path('modulos/<int:pk>/', ModuloUpdate.as_view())
 ]
 

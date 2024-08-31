@@ -96,6 +96,7 @@ class Matricula(models.Model):
     salario = models.CharField(null=True, blank=True)
     data_inicio_contrato = models.DateField(null=True, blank=True)
     data_terminio_contrato = models.DateField(null=True, blank=True)
+    quantidade_meses_contrato = models.IntegerField(null=True, blank=True)
     data_inicio_empresa = models.DateField(null=True, blank=True)
     data_terminio_empresa = models.DateField(null=True, blank=True)
     hora_inicio_expediente = models.CharField(max_length=10, null=True, blank=True)

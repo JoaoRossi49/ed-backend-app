@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Matricula, Turma, Cbo, Curso, Empresa, Escolaridade
+from .models import *
 
 class CboSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,6 +25,18 @@ class TurmaSerializer(serializers.ModelSerializer):
     data_inicio = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
     class Meta:
         model = Turma
+        fields = '__all__'
+
+class AulaSerializer(serializers.ModelSerializer):
+    turma_nome = serializers.CharField(source='turma.nome', read_only=True)
+    class Meta:
+        model = Aula
+        fields = '__all__'
+        extra_fields = ['turma_nome']
+
+class ModuloSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Modulo
         fields = '__all__'
 
 class MatriculaSerializer(serializers.ModelSerializer):

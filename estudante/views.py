@@ -1,5 +1,5 @@
 from rest_framework import generics
-from .models import Matricula, Turma, Cbo, Curso, Empresa, Escolaridade
+from .models import *
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -71,6 +71,26 @@ class TurmaUpdate(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Turma.objects.all()
     serializer_class = TurmaSerializer 
+
+class AulaList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Aula.objects.all()
+    serializer_class = AulaSerializer
+    
+class AulaUpdate(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Aula.objects.all()
+    serializer_class = AulaSerializer 
+
+class ModuloList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Modulo.objects.all()
+    serializer_class = ModuloSerializer
+    
+class ModuloUpdate(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Modulo.objects.all()
+    serializer_class = ModuloSerializer 
     
 def download_docx(request, matricula):
     doc_path = os.path.join(settings.BASE_DIR, 'estudante', 'contratos', 'templates', 'contrato15.docx')
@@ -89,7 +109,7 @@ def convert_docx_to_pdf(doc_buffer):
 
     y = height - 40
     for para in doc.paragraphs:
-        if y < 40:  # Verifica se há espaço suficiente na página
+        if y < 40: 
             c.showPage()
             y = height - 40
         c.drawString(40, y, para.text)
