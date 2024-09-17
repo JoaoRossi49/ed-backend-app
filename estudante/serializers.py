@@ -28,6 +28,7 @@ class TurmaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AulaSerializer(serializers.ModelSerializer):
+    data_aula = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
     turma_nome = serializers.CharField(source='turma.nome', read_only=True)
     class Meta:
         model = Aula

@@ -12,6 +12,7 @@ from io import BytesIO
 from docx import Document
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from .calendarios.html_calendar import gerar_calendario
 
 
 class CboList(generics.ListCreateAPIView):
@@ -91,9 +92,14 @@ class ModuloUpdate(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Modulo.objects.all()
     serializer_class = ModuloSerializer 
-    
+
+def renderizar_calendario(request, matricula):
+    html_content = gerar_calendario(matricula)
+    response = HttpResponse(html_content, content_type='text/html')
+    return response
+   
 def download_docx(request, matricula):
-    doc_path = os.path.join(settings.BASE_DIR, 'estudante', 'contratos', 'templates', 'contrato15.docx')
+    doc_path = os.path.join(settings.BASE_DIR, 'estudante', 'contratos', 'templates', f'contrato.docx')
     
     doc_buffer = modify_docx(doc_path, matricula)
 

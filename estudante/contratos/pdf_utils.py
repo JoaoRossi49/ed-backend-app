@@ -19,6 +19,7 @@ def consulta_matricula(matricula):
                         ec2.nome as "[NOME_CURSO]",
                         ec2.codigo as "[NRO_CURSO]",
                         '--' as "[PROTOCOLO_CURSO]",
+                        em.quantidade_meses_contrato as "[QTD_MESES_CONTRATO]",
                         '--' as "[CBOS_ASSOCIADOS]",
                         TO_CHAR(em.data_inicio_contrato, 'DD/MM/YYYY') as "[INICIO_CONTRATO]",
                         TO_CHAR(em.data_terminio_contrato, 'DD/MM/YYYY') as "[TERMINO_CONTRATO]",

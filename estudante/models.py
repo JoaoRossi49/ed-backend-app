@@ -26,7 +26,7 @@ class Curso(models.Model):
     nome = models.CharField(max_length=255)
     descricao = models.TextField(blank=True, null=True)
     codigo = models.CharField(blank=True, null=True)
-    carga_horaria_aula = models.TimeField(blank=True, null =True)
+    carga_horaria_aula = models.DurationField(blank=True, null =True)
     data_inclusao = models.DateTimeField(default=timezone.now, null=True, blank=True)
     def __str__(self):
         return self.nome
@@ -109,7 +109,10 @@ class Matricula(models.Model):
     cbo = models.ForeignKey(Cbo, on_delete=models.DO_NOTHING, null=True)
 
     def __str__(self):
-        return self.pessoa.nome + ' | ' + self.numero_matricula
+        nome = self.pessoa.nome if self.pessoa and self.pessoa.nome else 'Nome não disponível'
+        numero_matricula = self.numero_matricula if self.numero_matricula else 'Matrícula não disponível'
+        return nome + ' | ' + numero_matricula
+
     
 class Desligamento_matricula(models.Model):
     matricula = models.ForeignKey(Matricula, on_delete=models.DO_NOTHING)
