@@ -13,11 +13,27 @@ def generar_matricula():
         matricula = ''.join([str(random.randint(0, 9)) for _ in range(6)])
     return matricula
 
+class DiaSemana(models.Model):
+    DIA_CHOICES = [
+        ('Segunda-feira', 'Segunda-feira'),
+        ('Terça-feira', 'Terça-feira'),
+        ('Quarta-feira', 'Quarta-feira'),
+        ('Quinta-feira', 'Quinta-feira'),
+        ('Sexta-feira', 'Sexta-feira'),
+        ('Sábado', 'Sábado'),
+        ('Domingo', 'Domingo'),
+    ]
+    dia = models.CharField(max_length=20, choices=DIA_CHOICES, unique=True)
+
+    def __str__(self):
+        return self.get_dia_display()
+    
 class Turma(models.Model):
     nome = models.CharField(max_length=255)
     descricao = models.TextField(blank=True, null=True)
     data_inclusao = models.DateTimeField(default=timezone.now, null=True, blank=True)
-    data_inicio = models.DateField(blank=True, null= True)
+    dias_da_semana_empresa = models.ManyToManyField(DiaSemana, related_name='matriculas_empresa', null=True, blank=True)
+    dias_da_semana_curso = models.ManyToManyField(DiaSemana, related_name='matriculas_curso', null=True, blank=True)
     data_fim = models.DateField(blank=True, null=True)
     def __str__(self):
         return self.nome
@@ -63,21 +79,6 @@ class Escolaridade(models.Model):
     def __str__(self):
         return self.descricao
 
-class DiaSemana(models.Model):
-    DIA_CHOICES = [
-        ('Segunda-feira', 'Segunda-feira'),
-        ('Terça-feira', 'Terça-feira'),
-        ('Quarta-feira', 'Quarta-feira'),
-        ('Quinta-feira', 'Quinta-feira'),
-        ('Sexta-feira', 'Sexta-feira'),
-        ('Sábado', 'Sábado'),
-        ('Domingo', 'Domingo'),
-    ]
-    dia = models.CharField(max_length=20, choices=DIA_CHOICES, unique=True)
-
-    def __str__(self):
-        return self.get_dia_display()
-
 class Psa(models.Model):
     data_inicio = models.DateField()
     data_fim = models.DateField()
@@ -101,8 +102,6 @@ class Matricula(models.Model):
     data_terminio_empresa = models.DateField(null=True, blank=True)
     hora_inicio_expediente = models.CharField(max_length=10, null=True, blank=True)
     hora_fim_expediente = models.CharField(max_length=10, null=True, blank=True)
-    dias_da_semana_empresa = models.ManyToManyField(DiaSemana, related_name='matriculas_empresa', null=True, blank=True)
-    dias_da_semana_curso = models.ManyToManyField(DiaSemana, related_name='matriculas_curso', null=True, blank=True)
     turma = models.ForeignKey(Turma, on_delete= models.DO_NOTHING, null=True)
     curso = models.ForeignKey(Curso, on_delete= models.DO_NOTHING, null=True)
     empresa = models.ForeignKey(Empresa, on_delete= models.DO_NOTHING, null=True)

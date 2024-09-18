@@ -22,7 +22,6 @@ class EscolaridadeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TurmaSerializer(serializers.ModelSerializer):
-    data_inicio = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
     class Meta:
         model = Turma
         fields = '__all__'

@@ -7,7 +7,7 @@ from django.db import connection
 def consulta_matricula(matricula):
     with connection.cursor() as cursor:
         query = """
-                                select
+                    select
                         ee.nome_fantasia as "[NOME_EMPRESA]",
                         pde.nro_documento as "[CNPJ_EMPRESA]",
                         pee.logradouro || ' nº ' || pee.numero || ' na cidade de ' || pee.cidade || '/' || pee.estado as "[ENDERECO_EMPRESA]",
@@ -21,23 +21,28 @@ def consulta_matricula(matricula):
                         '--' as "[PROTOCOLO_CURSO]",
                         em.quantidade_meses_contrato as "[QTD_MESES_CONTRATO]",
                         '--' as "[CBOS_ASSOCIADOS]",
-                        TO_CHAR(em.data_inicio_contrato, 'DD/MM/YYYY') as "[INICIO_CONTRATO]",
-                        TO_CHAR(em.data_terminio_contrato, 'DD/MM/YYYY') as "[TERMINO_CONTRATO]",
-                        TO_CHAR(eat.data_inicio, 'DD/MM/YYYY') || ' a ' || TO_CHAR(eat.data_fim, 'DD/MM/YYYY') || ' das ' || eat.hora_inicio || ' às ' || eat.hora_termino as "[PERIODO_ATIVIDADE_TEORICA]",
+                        TO_CHAR(em.data_inicio_contrato,
+                        'DD/MM/YYYY') as "[INICIO_CONTRATO]",
+                        TO_CHAR(em.data_terminio_contrato,
+                        'DD/MM/YYYY') as "[TERMINO_CONTRATO]",
+                        TO_CHAR(eat.data_inicio,
+                        'DD/MM/YYYY') || ' a ' || TO_CHAR(eat.data_fim,
+                        'DD/MM/YYYY') || ' das ' || eat.hora_inicio || ' às ' || eat.hora_termino as "[PERIODO_ATIVIDADE_TEORICA]",
                         --30/07/2024 a 15/07/2024, das 08:30 às 14:45
-                        (
+                                            (
                         select
                             (
                             select
                                 STRING_AGG(ed.dia,
                                 ', ')
                             from
-                                estudante_matricula em3
-                            inner join estudante_matricula_dias_da_semana_empresa emddsc on
-                                em3.id = emddsc.matricula_id
+                                estudante_turma et
+                            inner join estudante_turma_dias_da_semana_empresa etddse on
+                                et.id = etddse.turma_id
                             inner join estudante_diasemana ed on
-                                ed.id = emddsc.diasemana_id
-                        ) as dias_agregados
+                                ed.id = etddse.diasemana_id
+                            where
+                                et.id = em.turma_id) as dias_agregados
                         from
                             estudante_matricula em2
                         where
@@ -45,19 +50,20 @@ def consulta_matricula(matricula):
                         limit 1) as "[DIAS_EMPRESA]",
                         em.hora_inicio_expediente as "[HORA_INICIO_EMPRESA]",
                         em.hora_fim_expediente as "[HORA_TERMINO_EMPRESA]",
-                            (
+                        (
                         select
                             (
                             select
                                 STRING_AGG(ed.dia,
                                 ', ')
                             from
-                                estudante_matricula em3
-                            inner join estudante_matricula_dias_da_semana_curso emddsc on
-                                em3.id = emddsc.matricula_id
+                                estudante_turma et
+                            inner join estudante_turma_dias_da_semana_curso etddsc on
+                                et.id = etddsc.turma_id
                             inner join estudante_diasemana ed on
-                                ed.id = emddsc.diasemana_id
-                        ) as dias_agregados
+                                ed.id = etddsc.diasemana_id
+                            where
+                                et.id = em.turma_id) as dias_agregados
                         from
                             estudante_matricula em2
                         where

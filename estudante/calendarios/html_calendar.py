@@ -11,7 +11,7 @@ def gerar_calendario(matricula):
     empresa = estudante.empresa.nome_fantasia
 
     #Listar todos os dias associados a essa matricula e converter para str
-    dias_da_semana_curso = ', '.join([dia.dia for dia in estudante.dias_da_semana_curso.all()])
+    dias_da_semana_curso = ', '.join([dia.dia for dia in estudante.turma.dias_da_semana_curso.all()])
     dia_curso_nome_turma = dias_da_semana_curso + ' ' + estudante.hora_inicio_expediente + 'h ' + ' às ' + estudante.hora_fim_expediente + 'h'
 
     curso = estudante.curso.codigo + ' - ' + estudante.curso.nome
