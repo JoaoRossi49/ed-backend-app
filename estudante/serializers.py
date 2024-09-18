@@ -22,9 +22,13 @@ class EscolaridadeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TurmaSerializer(serializers.ModelSerializer):
+    num_matriculas = serializers.SerializerMethodField()
     class Meta:
         model = Turma
         fields = '__all__'
+
+    def get_num_matriculas(self, obj):
+        return obj.matricula_set.filter(ativo=True).count()
 
 class AulaSerializer(serializers.ModelSerializer):
     data_aula = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
