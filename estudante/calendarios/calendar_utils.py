@@ -1,4 +1,4 @@
-from calendar import LocaleHTMLCalendar
+from calendar import LocaleHTMLCalendar, monthrange
 from datetime import datetime, date, timedelta
 import itertools
 import holidays
@@ -20,43 +20,51 @@ class CalendarUtils:
         diasTeorico = 0
         nome_dia = ""
         
-        for i in range(1, 32):
+        for i in range(1, monthrange(self.ano, self.mes)[1] + 1):
             try:
                 dia_atual = date(self.ano, self.mes, i)
-                amanha = date(self.ano, self.mes, i+1)
+                
+                try:
+                    amanha = date(self.ano, self.mes, i+1)
+                except:
+                    amanha = None
+
                 nome_dia = dia_atual.strftime("%a").lower()     
                 if not (self.start_date <= dia_atual <= self.end_date):
                     continue
-                nome_dia = dia_atual.strftime("%a").lower()
 
                 #Se o dia da próxima iteração for feriado e hoje for segunda ou sexta, será vermelho
                 if ((nome_dia == 'mon' or nome_dia == 'thu') and amanha in self.feriados):
                     self.html_mes = self.html_mes.replace(f'<td class="{nome_dia}">{i}</td>', 
                                         f'<td class="highlight-holiday">{i}</td>')    
-                    
+                    continue
+
                 # Se for dia útil e feriado, será vermelho
                 if dia_atual in self.feriados and nome_dia != 'sat' and nome_dia != 'sun':
                     self.html_mes = self.html_mes.replace(f'<td class="{nome_dia}">{i}</td>', 
                                         f'<td class="highlight-holiday">{i}</td>')
-                    
+                    continue
+
                 #os primeiros doze dias são de treinamento teórico
                 if self.qtd_dias_treinamento_inicial != 0 and nome_dia != 'sat' and nome_dia != 'sun':
                     self.html_mes = self.html_mes.replace(f'<td class="{nome_dia}">{i}</td>', 
                                         f'<td class="highlight-twelve-days">{i}</td>')
                     diasTeorico += 1
-                    self.qtd_dias_treinamento_inicial -= 1        
+                    self.qtd_dias_treinamento_inicial -= 1
+                    continue        
 
                 # Se tiver aula, será verde claro     
                 if dia_atual.weekday() == self.dia_teorico:
                     self.html_mes = self.html_mes.replace(f'<td class="{nome_dia}">{i}</td>', 
                                         f'<td class="highlight">{i}</td>')
                     diasTeorico += 1
+                    continue
                     
                 #Se for um dia útil sem ser o dia de aula, será amarelo
-                if nome_dia != 'sat' and nome_dia != 'sun' and dia_atual.weekday() != self.dia_teorico:
+                if dia_atual.weekday() != self.dia_teorico:
                     self.html_mes = self.html_mes.replace(f'<td class="{nome_dia}">{i}</td>', 
                                         f'<td class="highlight-work">{i}</td>')                 
-                        
+                    continue
 
             except Exception as e:
                 continue
