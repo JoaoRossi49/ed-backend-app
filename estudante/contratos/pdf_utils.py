@@ -18,7 +18,7 @@ def consulta_matricula(matricula):
                         ec.codigo as "[NRO_CBO]",
                         ec2.nome as "[NOME_CURSO]",
                         ec2.codigo as "[NRO_CURSO]",
-                        '--' as "[PROTOCOLO_CURSO]",
+                        ec2.protocolo as "[PROTOCOLO_CURSO]",
                         em.quantidade_meses_contrato as "[QTD_MESES_CONTRATO]",
                         '--' as "[CBOS_ASSOCIADOS]",
                         TO_CHAR(em.data_inicio_contrato,
@@ -69,6 +69,8 @@ def consulta_matricula(matricula):
                         where
                             em2.id = em.id
                         limit 1) as "[DIAS_APRENDIZAGEM]",
+                        et.hora_inicio_encontro as "[HORA_INICIO_CURSO]",
+                        et.hora_fim_encontro as "[HORA_FIM_CURSO]",
                         em.salario as "[SALARIO]",
                         '--' as "[ATIVIDADES_PRATICAS]",
                         TO_CHAR(current_date,
@@ -88,7 +90,8 @@ def consulta_matricula(matricula):
                         inner join pessoa_pessoa_documento ppd2 on
                             pd2.id = ppd2.documento_id
                             and ppd2.pessoa_id = pessoa_responsavel_id
-                            and pd2.tipo_documento = 'CPF') as "[CPF_RESPONSAVEL_EMPRESA]"
+                            and pd2.tipo_documento = 'CPF'
+                            limit 1) as "[CPF_RESPONSAVEL_EMPRESA]"
                     from
                         estudante_matricula em,
                         pessoa_pessoa pp,

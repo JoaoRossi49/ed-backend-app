@@ -34,6 +34,8 @@ class Turma(models.Model):
     data_inclusao = models.DateTimeField(default=timezone.now, null=True, blank=True)
     dias_da_semana_empresa = models.ManyToManyField(DiaSemana, related_name='matriculas_empresa', null=True, blank=True)
     dias_da_semana_curso = models.ManyToManyField(DiaSemana, related_name='matriculas_curso', null=True, blank=True)
+    hora_inicio_encontro = models.CharField(max_length=10, null=True, blank=True)
+    hora_fim_encontro = models.CharField(max_length=10, null=True, blank=True)
     data_fim = models.DateField(blank=True, null=True)
     def __str__(self):
         return self.nome
@@ -42,6 +44,7 @@ class Curso(models.Model):
     nome = models.CharField(max_length=255)
     descricao = models.TextField(blank=True, null=True)
     codigo = models.CharField(blank=True, null=True)
+    protocolo = models.CharField(blank=True, null=True)
     carga_horaria_aula = models.DurationField(blank=True, null =True)
     data_inclusao = models.DateTimeField(default=timezone.now, null=True, blank=True)
     def __str__(self):
