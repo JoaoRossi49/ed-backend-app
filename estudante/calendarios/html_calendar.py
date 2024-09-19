@@ -1,6 +1,6 @@
 import calendar
 from datetime import date, datetime
-from .calendar_utils import generate_html_calendar, get_feriados, pintar_dia
+from .calendar_utils import CalendarUtils
 from estudante.models import Matricula, DiaSemana
 
 def gerar_calendario(matricula):
@@ -11,7 +11,7 @@ def gerar_calendario(matricula):
     empresa = estudante.empresa.nome_fantasia
 
     #Listar todos os dias associados a essa matricula e converter para str
-    dias_da_semana_curso = ', '.join([dia.dia for dia in estudante.turma.dias_da_semana_curso.all()])
+    dias_da_semana_curso = ', '.join([str(dia.id) for dia in estudante.turma.dias_da_semana_curso.all()])
     dia_curso_nome_turma = dias_da_semana_curso + ' ' + estudante.hora_inicio_expediente + 'h ' + ' às ' + estudante.hora_fim_expediente + 'h'
 
     curso = estudante.curso.codigo + ' - ' + estudante.curso.nome
@@ -23,32 +23,37 @@ def gerar_calendario(matricula):
     carga_horaria = str(horas_aula) + 'h'
 
     # Ajustar as datas de início e fim
-    start_date_str = "17/01/2024"
-    end_date_str = "17/12/2025"
-    
-    diasTeorico = 0
+    start_date_str = inicio_contrato
+    end_date_str = fim_contrato
 
     start_date = datetime.strptime(start_date_str, "%d/%m/%Y").date()
     end_date = datetime.strptime(end_date_str, "%d/%m/%Y").date()
 
-    # Definir os feriados
-    feriados = get_feriados(start_date.year, end_date.year)
+    #Criação de instancia de configurações de geração do calendario
+    calendar_utils = CalendarUtils()
+    calendar_utils.qtd_dias_treinamento_inicial = 12
+    calendar_utils.start_date = start_date
+    calendar_utils.end_date = end_date
+    calendar_utils.dia_teorico = int(dias_da_semana_curso[0])-1
 
-    html_months_list = generate_html_calendar(start_date_str, end_date_str, locale='pt_BR')
+    # Definir os feriados
+    feriados = calendar_utils.get_feriados()
+
+    calendar_utils.feriados = feriados
+
+    #Gerar calendarios em lista
+    html_months_list = calendar_utils.generate_html_calendar()
+
+    #Variável de armazenamento de resultado
+    html_calendar = ''
 
     # Loop sobre anos e meses
-    html_calendar = ''
-    
     for index, (data, html) in enumerate(html_months_list):
-        mes = data.month
-        ano = data.year
-        isPrimeiroAno = False
-        if index == 0:
-            isPrimeiroAno = True
+        calendar_utils.mes = data.month
+        calendar_utils.ano = data.year
+        calendar_utils.html_mes = html
             
-        html = pintar_dia(html, 0, mes, ano, feriados, start_date, end_date, isPrimeiroAno)
-
-        html = html.replace(' 2024', '')
+        html = calendar_utils.pintar_dia()
         
         if index == 0 or index % 2 != 0:
             html_calendar += '<tr class="mes">'
@@ -70,7 +75,6 @@ def gerar_calendario(matricula):
     html_content = html_content.replace('[FIM_CONTRATO]', fim_contrato)
     html_content = html_content.replace('[DURACAO_CONTRATO]', str(duracao_contrato))
     html_content = html_content.replace('[CARGA_HORARIA]', carga_horaria)
-    
 
         
     html_content += f"""
