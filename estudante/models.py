@@ -53,7 +53,7 @@ class Curso(models.Model):
 class Empresa(models.Model):
     nome_fantasia = models.CharField(max_length=255)
     razao_social = models.CharField(max_length=255)
-    pessoa_responsavel = models.ForeignKey(Pessoa, on_delete= models.CASCADE, null=True)
+    pessoa_responsavel = models.ForeignKey(Pessoa, on_delete= models.DO_NOTHING, null=True)
     documento = models.ManyToManyField(Documento,  related_name='empresas', blank=True)
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True)
     def __str__(self):
@@ -66,8 +66,8 @@ class Cbo(models.Model):
         return self.descricao
     
 class CBOAssociado(models.Model):
-    cbo = models.ForeignKey(Cbo, related_name='associados', on_delete=models.CASCADE)
-    associado = models.ForeignKey(Cbo, related_name='associado_de', on_delete=models.CASCADE)
+    cbo = models.ForeignKey(Cbo, related_name='associados', on_delete=models.DO_NOTHING)
+    associado = models.ForeignKey(Cbo, related_name='associado_de', on_delete=models.DO_NOTHING)
 
     class Meta:
         unique_together = ('cbo', 'associado')
@@ -129,7 +129,7 @@ class Atividade_teorica(models.Model):
     matricula = models.ForeignKey(Matricula, on_delete=models.DO_NOTHING)
     data_inicio = models.DateField(null=True, blank=True)
     data_fim = models.DateField(null=True, blank=True)
-    dias_da_semana = models.ManyToManyField(DiaSemana)
+    quantidade_de_encontros = models.IntegerField(null=True, blank=True)
     hora_inicio = models.CharField(max_length=10, null=True, blank=True)
     hora_termino = models.CharField(max_length=10, null=True, blank=True)
 

@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.views import APIView
 from .models import *
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
@@ -92,6 +93,27 @@ class ModuloUpdate(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Modulo.objects.all()
     serializer_class = ModuloSerializer 
+
+class RegisterPresencesView(APIView):
+    def post(self, request):
+        matriculas_ids = request.data.get('matriculas_ids')
+        aula = Aula.objects.get(id=request.data.get('aula_id'))
+        tipo_presenca = Tipo_presenca.objects.get(id=request.data.get('tipo_presenca'))
+        data_presenca = request.data.get('data_presenca')
+
+        presencas = []
+        for matricula_id in matriculas_ids:
+            presenca = Presenca(
+                matricula_id=matricula_id,
+                aula_id=aula,
+                tipo_presenca_id=tipo_presenca.id,
+                data_presenca=data_presenca
+            )
+            presencas.append(presenca)
+
+        Presenca.objects.bulk_create(presencas)
+
+        return Response({'message': 'Presenças registradas com sucesso'})
 
 def renderizar_calendario(request, matricula):
     html_content = gerar_calendario(matricula)

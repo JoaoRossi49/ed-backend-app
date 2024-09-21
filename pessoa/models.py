@@ -10,7 +10,7 @@ class Contato(models.Model):
     ("EMAIL", "E-mail")
     )
     tipo_contato = models.CharField(max_length=10, choices=TIPOS_CONTATO_CHOICES)
-    descricao = models.CharField(max_length=255)
+    descricao = models.CharField(max_length=255, null=True, blank=True)
     data_inclusao = models.DateTimeField(default=timezone.now)
     data_alteracao = models.DateTimeField(null=True, blank=True)
 

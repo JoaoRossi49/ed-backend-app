@@ -69,3 +69,8 @@ class TurmaCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Turma
         fields = ('id',)
+
+class PresencaSerializer(serializers.ModelSerializer):
+    class meta:
+        model = Presenca
+        fields = '__all__'

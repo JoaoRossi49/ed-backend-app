@@ -15,6 +15,7 @@ urlpatterns = [
     path('calendario/<str:matricula>/', renderizar_calendario),
     path('aulas/', AulaList.as_view()),
     path('aulas/<int:pk>/', AulaUpdate.as_view()),
+    path('aulas/presencas/', RegisterPresencesView.as_view()),
     path('modulos/', ModuloList.as_view()),
     path('modulos/<int:pk>/', ModuloUpdate.as_view())
 ]
