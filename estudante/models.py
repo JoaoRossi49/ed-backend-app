@@ -109,6 +109,7 @@ class Matricula(models.Model):
     curso = models.ForeignKey(Curso, on_delete= models.DO_NOTHING, null=True)
     empresa = models.ForeignKey(Empresa, on_delete= models.DO_NOTHING, null=True)
     cbo = models.ForeignKey(Cbo, on_delete=models.DO_NOTHING, null=True)
+    atividades_praticas = models.CharField(null=True, blank=True)
 
     def __str__(self):
         nome = self.pessoa.nome if self.pessoa and self.pessoa.nome else 'Nome não disponível'

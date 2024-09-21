@@ -72,7 +72,7 @@ def consulta_matricula(matricula):
                         et.hora_inicio_encontro as "[HORA_INICIO_CURSO]",
                         et.hora_fim_encontro as "[HORA_FIM_CURSO]",
                         em.salario as "[SALARIO]",
-                        '--' as "[ATIVIDADES_PRATICAS]",
+                        em.atividades_praticas as "[ATIVIDADES_PRATICAS]",
                         TO_CHAR(current_date,
                         'DD/MM/YYYY') as "[DATA_ATUAL]",
                         (
