@@ -88,7 +88,7 @@ class Psa(models.Model):
     descricao = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.data} - {self.descricao}"
+        return f"{self.descricao} - {self.data_inicio}  até {self.data_fim}"
 
 class Matricula(models.Model):
     numero_matricula = models.CharField(max_length=6, unique=True, default=generar_matricula)
