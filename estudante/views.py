@@ -36,6 +36,14 @@ class EscolaridadeList(generics.ListCreateAPIView):
     queryset = Escolaridade.objects.all()
     serializer_class = EscolaridadeSerializer
 
+class MatriculaInativaList(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        matriculas_inativas = Matricula.objects.filter(ativo=False)
+        serializer = MatriculaInativaSerializer(matriculas_inativas, many=True)
+        return Response(serializer.data)
+
 class MatriculaList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = MatriculaSerializer

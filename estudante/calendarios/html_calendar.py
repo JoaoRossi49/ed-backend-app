@@ -76,19 +76,18 @@ def gerar_calendario(matricula):
     html_content = html_content.replace('[DURACAO_CONTRATO]', str(duracao_contrato))
     html_content = html_content.replace('[CARGA_HORARIA]', carga_horaria)
 
+    with open('estudante\calendarios\horas_resumo_table.html', 'r', encoding='utf-8') as file:
+        footer = file.read() #Voltar a adicionar footer quando lógica de resumo for refeita
         
     html_content += f"""
     <table border="0" cellpadding="0" cellspacing="0">
         {html_calendar}
-            </table>
+        </table>
     </body>
     </html>
     """
 
-    #filename = "calendario.html"
 
-    #with open(filename, "w", encoding="utf-8") as file:
-        #file.write(html_content)
-
+    
     return html_content
 

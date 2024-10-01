@@ -43,6 +43,11 @@ class ModuloSerializer(serializers.ModelSerializer):
         model = Modulo
         fields = '__all__'
 
+class MatriculaInativaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Matricula
+        fields = '__all__'
+
 class MatriculaSerializer(serializers.ModelSerializer):
     escolaridade_nome = serializers.CharField(source='escolaridade.descricao', read_only=True)
     turma_nome = serializers.CharField(source='turma.nome', read_only=True)
