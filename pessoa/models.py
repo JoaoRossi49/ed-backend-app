@@ -60,7 +60,7 @@ class Pessoa(models.Model):
     sexo = models.CharField(max_length=1, null=True, blank=True)
     data_nascimento = models.DateField()
     data_inclusao = models.DateTimeField(default=timezone.now)
-    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True)
+    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True, blank=True)
     contato = models.ManyToManyField(Contato, related_name='pessoas', blank=True)
     documento = models.ManyToManyField(Documento,  related_name='pessoas', blank=True)
     
