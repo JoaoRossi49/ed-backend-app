@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class Contato(models.Model):
     TIPOS_CONTATO_CHOICES = (
     ("CELULAR", "Celular"),
-    ("CELULAR_SECUNDARIO", "Celular secundário"),
+    ("CELULAR_2", "Celular secundário"),
     ("TELEFONE", "Telefone"),
     ("EMAIL", "E-mail")
     )
