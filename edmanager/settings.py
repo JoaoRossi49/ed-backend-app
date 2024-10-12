@@ -26,7 +26,7 @@ SECRET_KEY = '20enqy@r&$s&_vdeu)y5@w1)&9hvf#*=8)88mnw-x_6o+fym^5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'http://localhost:3000']
+ALLOWED_HOSTS = ['*']
 
 
 
@@ -63,7 +63,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(hours=3),
 }
 
 MIDDLEWARE = [

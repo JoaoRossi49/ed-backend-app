@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Matricula, Turma, Cbo, Curso, Empresa, Escolaridade
+from .models import *
 
 class CboSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,9 +22,30 @@ class EscolaridadeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TurmaSerializer(serializers.ModelSerializer):
-    data_inicio = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
+    num_matriculas = serializers.SerializerMethodField()
     class Meta:
         model = Turma
+        fields = '__all__'
+
+    def get_num_matriculas(self, obj):
+        return obj.matricula_set.filter(ativo=True).count()
+
+class AulaSerializer(serializers.ModelSerializer):
+    data_aula = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
+    turma_nome = serializers.CharField(source='turma.nome', read_only=True)
+    class Meta:
+        model = Aula
+        fields = '__all__'
+        extra_fields = ['turma_nome']
+
+class ModuloSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Modulo
+        fields = '__all__'
+
+class MatriculaInativaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Matricula
         fields = '__all__'
 
 class MatriculaSerializer(serializers.ModelSerializer):
@@ -53,3 +74,8 @@ class TurmaCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Turma
         fields = ('id',)
+
+class PresencaSerializer(serializers.ModelSerializer):
+    class meta:
+        model = Presenca
+        fields = '__all__'

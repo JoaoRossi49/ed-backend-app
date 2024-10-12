@@ -6,11 +6,12 @@ from django.contrib.auth.models import User
 class Contato(models.Model):
     TIPOS_CONTATO_CHOICES = (
     ("CELULAR", "Celular"),
+    ("CELULAR_2", "Celular secundário"),
     ("TELEFONE", "Telefone"),
     ("EMAIL", "E-mail")
     )
     tipo_contato = models.CharField(max_length=10, choices=TIPOS_CONTATO_CHOICES)
-    descricao = models.CharField(max_length=255)
+    descricao = models.CharField(max_length=255, null=True, blank=True)
     data_inclusao = models.DateTimeField(default=timezone.now)
     data_alteracao = models.DateTimeField(null=True, blank=True)
 
@@ -60,7 +61,7 @@ class Pessoa(models.Model):
     sexo = models.CharField(max_length=1, null=True, blank=True)
     data_nascimento = models.DateField()
     data_inclusao = models.DateTimeField(default=timezone.now)
-    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True)
+    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True, blank=True)
     contato = models.ManyToManyField(Contato, related_name='pessoas', blank=True)
     documento = models.ManyToManyField(Documento,  related_name='pessoas', blank=True)
     

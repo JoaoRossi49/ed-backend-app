@@ -1,5 +1,6 @@
 from rest_framework import generics
-from .models import Matricula, Turma, Cbo, Curso, Empresa, Escolaridade
+from rest_framework.views import APIView
+from .models import *
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -12,6 +13,7 @@ from io import BytesIO
 from docx import Document
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from .calendarios.html_calendar import gerar_calendario
 
 
 class CboList(generics.ListCreateAPIView):
@@ -33,6 +35,14 @@ class EscolaridadeList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Escolaridade.objects.all()
     serializer_class = EscolaridadeSerializer
+
+class MatriculaInativaList(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        matriculas_inativas = Matricula.objects.filter(ativo=False)
+        serializer = MatriculaInativaSerializer(matriculas_inativas, many=True)
+        return Response(serializer.data)
 
 class MatriculaList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -71,9 +81,55 @@ class TurmaUpdate(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Turma.objects.all()
     serializer_class = TurmaSerializer 
+
+class AulaList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Aula.objects.all()
+    serializer_class = AulaSerializer
     
+class AulaUpdate(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Aula.objects.all()
+    serializer_class = AulaSerializer 
+
+class ModuloList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Modulo.objects.all()
+    serializer_class = ModuloSerializer
+    
+class ModuloUpdate(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Modulo.objects.all()
+    serializer_class = ModuloSerializer 
+
+class RegisterPresencesView(APIView):
+    def post(self, request):
+        matriculas_ids = request.data.get('matriculas_ids')
+        aula = Aula.objects.get(id=request.data.get('aula_id'))
+        tipo_presenca = Tipo_presenca.objects.get(id=request.data.get('tipo_presenca'))
+        data_presenca = request.data.get('data_presenca')
+
+        presencas = []
+        for matricula_id in matriculas_ids:
+            presenca = Presenca(
+                matricula_id=matricula_id,
+                aula_id=aula,
+                tipo_presenca_id=tipo_presenca.id,
+                data_presenca=data_presenca
+            )
+            presencas.append(presenca)
+
+        Presenca.objects.bulk_create(presencas)
+
+        return Response({'message': 'Presenças registradas com sucesso'})
+
+def renderizar_calendario(request, matricula):
+    html_content = gerar_calendario(matricula)
+    response = HttpResponse(html_content, content_type='text/html')
+    return response
+   
 def download_docx(request, matricula):
-    doc_path = os.path.join(settings.BASE_DIR, 'estudante', 'contratos', 'templates', 'contrato15.docx')
+    doc_path = os.path.join(settings.BASE_DIR, 'estudante', 'contratos', 'templates', f'contrato.docx')
     
     doc_buffer = modify_docx(doc_path, matricula)
 
@@ -89,7 +145,7 @@ def convert_docx_to_pdf(doc_buffer):
 
     y = height - 40
     for para in doc.paragraphs:
-        if y < 40:  # Verifica se há espaço suficiente na página
+        if y < 40: 
             c.showPage()
             y = height - 40
         c.drawString(40, y, para.text)

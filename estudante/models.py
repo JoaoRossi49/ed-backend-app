@@ -13,56 +13,6 @@ def generar_matricula():
         matricula = ''.join([str(random.randint(0, 9)) for _ in range(6)])
     return matricula
 
-class Turma(models.Model):
-    nome = models.CharField(max_length=255)
-    descricao = models.TextField(blank=True, null=True)
-    data_inclusao = models.DateTimeField(default=timezone.now, null=True, blank=True)
-    data_inicio = models.DateField(blank=True, null= True)
-    data_fim = models.DateField(blank=True, null=True)
-    def __str__(self):
-        return self.nome
-
-class Curso(models.Model):
-    nome = models.CharField(max_length=255)
-    descricao = models.TextField(blank=True, null=True)
-    codigo = models.CharField(blank=True, null=True)
-    carga_horaria_aula = models.TimeField(blank=True, null =True)
-    data_inclusao = models.DateTimeField(default=timezone.now, null=True, blank=True)
-    def __str__(self):
-        return self.nome
-
-class Empresa(models.Model):
-    nome_fantasia = models.CharField(max_length=255)
-    razao_social = models.CharField(max_length=255)
-    pessoa_responsavel = models.ForeignKey(Pessoa, on_delete= models.CASCADE, null=True)
-    documento = models.ManyToManyField(Documento,  related_name='empresas', blank=True)
-    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True)
-    def __str__(self):
-        return self.nome_fantasia
-
-class Cbo(models.Model):
-    descricao = models.CharField(max_length=255)
-    codigo = models.CharField(max_length=255)
-    def __str__(self):
-        return self.descricao
-    
-class CBOAssociado(models.Model):
-    cbo = models.ForeignKey(Cbo, related_name='associados', on_delete=models.CASCADE)
-    associado = models.ForeignKey(Cbo, related_name='associado_de', on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('cbo', 'associado')
-        verbose_name = 'Associação de CBO'
-        verbose_name_plural = 'Associações de CBOs'
-
-    def __str__(self):
-        return f"{self.cbo} associado a {self.associado}"
-
-class Escolaridade(models.Model):
-    descricao = models.CharField(max_length=255)
-    def __str__(self):
-        return self.descricao
-
 class DiaSemana(models.Model):
     DIA_CHOICES = [
         ('Segunda-feira', 'Segunda-feira'),
@@ -77,6 +27,60 @@ class DiaSemana(models.Model):
 
     def __str__(self):
         return self.get_dia_display()
+    
+class Turma(models.Model):
+    nome = models.CharField(max_length=255)
+    descricao = models.TextField(blank=True, null=True)
+    data_inclusao = models.DateTimeField(default=timezone.now, null=True, blank=True)
+    dias_da_semana_empresa = models.ManyToManyField(DiaSemana, related_name='matriculas_empresa', null=True, blank=True)
+    dias_da_semana_curso = models.ManyToManyField(DiaSemana, related_name='matriculas_curso', null=True, blank=True)
+    hora_inicio_encontro = models.CharField(max_length=10, null=True, blank=True)
+    hora_fim_encontro = models.CharField(max_length=10, null=True, blank=True)
+    data_fim = models.DateField(blank=True, null=True)
+    def __str__(self):
+        return self.nome
+
+class Curso(models.Model):
+    nome = models.CharField(max_length=255)
+    descricao = models.TextField(blank=True, null=True)
+    codigo = models.CharField(blank=True, null=True)
+    protocolo = models.CharField(blank=True, null=True)
+    carga_horaria_aula = models.DurationField(blank=True, null =True)
+    data_inclusao = models.DateTimeField(default=timezone.now, null=True, blank=True)
+    def __str__(self):
+        return self.nome
+
+class Empresa(models.Model):
+    nome_fantasia = models.CharField(max_length=255)
+    razao_social = models.CharField(max_length=255)
+    pessoa_responsavel = models.ForeignKey(Pessoa, on_delete= models.DO_NOTHING, null=True)
+    documento = models.ManyToManyField(Documento,  related_name='empresas', blank=True)
+    endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True)
+    def __str__(self):
+        return self.nome_fantasia
+
+class Cbo(models.Model):
+    descricao = models.CharField(max_length=255)
+    codigo = models.CharField(max_length=255)
+    def __str__(self):
+        return self.descricao
+    
+class CBOAssociado(models.Model):
+    cbo = models.ForeignKey(Cbo, related_name='associados', on_delete=models.DO_NOTHING)
+    associado = models.ForeignKey(Cbo, related_name='associado_de', on_delete=models.DO_NOTHING)
+
+    class Meta:
+        unique_together = ('cbo', 'associado')
+        verbose_name = 'Associação de CBO'
+        verbose_name_plural = 'Associações de CBOs'
+
+    def __str__(self):
+        return f"{self.cbo} associado a {self.associado}"
+
+class Escolaridade(models.Model):
+    descricao = models.CharField(max_length=255)
+    def __str__(self):
+        return self.descricao
 
 class Psa(models.Model):
     data_inicio = models.DateField()
@@ -84,7 +88,7 @@ class Psa(models.Model):
     descricao = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.data} - {self.descricao}"
+        return f"{self.descricao} - {self.data_inicio}  até {self.data_fim}"
 
 class Matricula(models.Model):
     numero_matricula = models.CharField(max_length=6, unique=True, default=generar_matricula)
@@ -96,19 +100,22 @@ class Matricula(models.Model):
     salario = models.CharField(null=True, blank=True)
     data_inicio_contrato = models.DateField(null=True, blank=True)
     data_terminio_contrato = models.DateField(null=True, blank=True)
+    quantidade_meses_contrato = models.IntegerField(null=True, blank=True)
     data_inicio_empresa = models.DateField(null=True, blank=True)
     data_terminio_empresa = models.DateField(null=True, blank=True)
     hora_inicio_expediente = models.CharField(max_length=10, null=True, blank=True)
     hora_fim_expediente = models.CharField(max_length=10, null=True, blank=True)
-    dias_da_semana_empresa = models.ManyToManyField(DiaSemana, related_name='matriculas_empresa', null=True, blank=True)
-    dias_da_semana_curso = models.ManyToManyField(DiaSemana, related_name='matriculas_curso', null=True, blank=True)
     turma = models.ForeignKey(Turma, on_delete= models.DO_NOTHING, null=True)
     curso = models.ForeignKey(Curso, on_delete= models.DO_NOTHING, null=True)
     empresa = models.ForeignKey(Empresa, on_delete= models.DO_NOTHING, null=True)
     cbo = models.ForeignKey(Cbo, on_delete=models.DO_NOTHING, null=True)
+    atividades_praticas = models.CharField(null=True, blank=True)
 
     def __str__(self):
-        return self.pessoa.nome + ' | ' + self.numero_matricula
+        nome = self.pessoa.nome if self.pessoa and self.pessoa.nome else 'Nome não disponível'
+        numero_matricula = self.numero_matricula if self.numero_matricula else 'Matrícula não disponível'
+        return nome + ' | ' + numero_matricula
+
     
 class Desligamento_matricula(models.Model):
     matricula = models.ForeignKey(Matricula, on_delete=models.DO_NOTHING)
@@ -123,7 +130,7 @@ class Atividade_teorica(models.Model):
     matricula = models.ForeignKey(Matricula, on_delete=models.DO_NOTHING)
     data_inicio = models.DateField(null=True, blank=True)
     data_fim = models.DateField(null=True, blank=True)
-    dias_da_semana = models.ManyToManyField(DiaSemana)
+    quantidade_de_encontros = models.IntegerField(null=True, blank=True)
     hora_inicio = models.CharField(max_length=10, null=True, blank=True)
     hora_termino = models.CharField(max_length=10, null=True, blank=True)
 
