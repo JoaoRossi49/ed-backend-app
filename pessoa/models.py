@@ -19,14 +19,14 @@ class Contato(models.Model):
         return self.descricao
 
 class Endereco(models.Model):
-    logradouro = models.CharField(max_length=255)
-    numero = models.CharField(max_length=9)
+    logradouro = models.CharField(max_length=255, null=True, blank=True)
+    numero = models.CharField(max_length=9, null=True, blank=True)
     data_inclusao = models.DateTimeField(default=timezone.now)
     complemento = models.CharField(max_length=255, null=True, blank=True)
-    cidade = models.CharField(max_length=80, null=True)
-    estado = models.CharField(max_length=50, null=True)
-    pais = models.CharField(max_length=50, null=True)
-    cep = models.CharField(max_length=20, null=True)
+    cidade = models.CharField(max_length=80, null=True, blank=True)
+    estado = models.CharField(max_length=50, null=True, blank=True)
+    pais = models.CharField(max_length=50, null=True, blank=True)
+    cep = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
         return f"{self.logradouro}, {self.numero}"
@@ -40,7 +40,8 @@ class Documento(models.Model):
     ("CNH", "Carteira de motorista"),
     ("EL", "Título de eleitor"),
     ("CNS", "Cartão nacional de saúde"),
-    ("CNPJ", "Cadastro Nacional da Pessoa Jurídica")
+    ("CNPJ", "Cadastro Nacional da Pessoa Jurídica"),
+    ("RA", "Registro de Aluno"),
     )
     nro_documento = models.CharField(max_length=60)
     data_inclusao = models.DateTimeField(default=timezone.now)
