@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
 from datetime import timedelta
+
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,10 +24,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '20enqy@r&$s&_vdeu)y5@w1)&9hvf#*=8)88mnw-x_6o+fym^5'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -110,10 +113,10 @@ WSGI_APPLICATION = 'edmanager.wsgi.application'
 
 DATABASES = {
     'default': {
-        'NAME': 'postgres',
-        'ENGINE':'django.db.backends.postgresql',
-        'USER':'postgres',
-        'PASSWORD':'1234',
+        'NAME': os.getenv('DB_NAME'),
+        'ENGINE': os.getenv('DB_ENGINE'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
     }
 }
 
