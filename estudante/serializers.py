@@ -56,6 +56,8 @@ class MatriculaSerializer(serializers.ModelSerializer):
     cbo_nome = serializers.CharField(source='cbo.descricao', read_only=True)
     data_inicio_contrato = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
     data_terminio_contrato = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
+    data_inicio_treinamento = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
+    data_fim_treinamento = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
     data_inicio_empresa = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
     data_terminio_empresa = serializers.DateField(format="%d/%m/%Y", input_formats=['%d/%m/%Y'])
 

@@ -103,6 +103,8 @@ class Matricula(models.Model):
     data_inicio_contrato = models.DateField(null=True, blank=True)
     data_terminio_contrato = models.DateField(null=True, blank=True)
     quantidade_meses_contrato = models.IntegerField(null=True, blank=True)
+    data_inicio_treinamento = models.DateField(null=True, blank=True)
+    data_fim_treinamento = models.DateField(null=True, blank=True)
     data_inicio_empresa = models.DateField(null=True, blank=True)
     data_terminio_empresa = models.DateField(null=True, blank=True)
     hora_inicio_expediente = models.CharField(max_length=10, null=True, blank=True)
@@ -110,6 +112,7 @@ class Matricula(models.Model):
     turma = models.ForeignKey(Turma, on_delete= models.DO_NOTHING, null=True)
     curso = models.ForeignKey(Curso, on_delete= models.DO_NOTHING, null=True)
     empresa = models.ForeignKey(Empresa, on_delete= models.DO_NOTHING, null=True)
+    funcao_empresa = models.CharField(null=True, blank=True)
     cbo = models.ForeignKey(Cbo, on_delete=models.DO_NOTHING, null=True)
     atividades_praticas = models.CharField(null=True, blank=True)
 

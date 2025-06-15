@@ -43,7 +43,7 @@ class Documento(models.Model):
     ("CNPJ", "Cadastro Nacional da Pessoa Jurídica"),
     ("RA", "Registro de Aluno"),
     )
-    nro_documento = models.CharField(max_length=60)
+    nro_documento = models.CharField(max_length=60, blank=True, null=True)
     data_inclusao = models.DateTimeField(default=timezone.now)
     tipo_documento = models.CharField(max_length=40, choices=TIPOS_DOCUMENTO_CHOICES)
 
@@ -64,7 +64,7 @@ class Pessoa(models.Model):
     data_inclusao = models.DateTimeField(default=timezone.now)
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE, null=True, blank=True)
     contato = models.ManyToManyField(Contato, related_name='pessoas', blank=True)
-    documento = models.ManyToManyField(Documento,  related_name='pessoas', blank=True)
+    documento = models.ManyToManyField(Documento,  related_name='pessoas', blank=True, null = True)
     
     def __str__(self):
         if self.nome:
